@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Красный переводчик</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .rich-textbox {
+            width: 100%;
+            height: 200px;
+        }
+
+        .button {
+            margin-top: 10px;
+        }
+    </style>
+    <script type="text/javascript" src="./scripts.js"></script>
+</head>
+
+<body>
+
+    <h1>Перевод стат блоков</h1>
+
+    <label for="filePicker">Файл с переводом:</label>
+    <input type="file" id="filePicker"><br><br>
+
+    <span>
+        <label for="richTextbox">Разделитель:</label><br>
+        <input type="text" id="separatorField" value="•">
+    </span>
+    <span>
+        <p>Сортировка:</p>
+          <input type="radio" name="order" value="0" checked="1">
+          <label for="1">Оригинал</label><br>
+          <input type="radio" name="order" value="1">
+          <label for="2">Алфавит</label><br>
+    </span>
+    <br><br>
+
+    <label for="richTextbox">Оригинал:</label><br>
+    <textarea id="richTextbox" class="rich-textbox"></textarea><br><br>
+
+    <button class="button" onclick="execute()">Погнали</button><br><br>
+
+    <label for="textField">Результат:</label><br>
+    <textarea id="textField" class="rich-textbox"></textarea><br><br>
+
+    <script>
+        function execute() {
+            const translationFile = document.getElementById('filePicker').files[0];
+            const translation = readFile(translationFile, continueExecute);
+        }
+
+        function continueExecute(translation) {
+            const separator = document.getElementById('separatorField').value;
+            let order = document.querySelector('input[name="order"]:checked').value;
+
+            const richText = document.getElementById('richTextbox').value;
+
+            let skillPairs = splitString(richText);
+            skillPairs = translatePairs(skillPairs, translation, order);
+
+            let resultString = joinPairs(skillPairs, separator);
+
+            document.getElementById('textField').value = resultString;
+        }
+
+    </script>
+
+</body>
+
+</html>
